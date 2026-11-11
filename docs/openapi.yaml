@@ -1,0 +1,292 @@
+openapi: 3.0.3
+info:
+  title: Biblioteca API
+  version: 1.0.0
+  description: API de domínio único para cadastro de livros e empréstimos. Fluxo principal - cadastrar livro, emprestar e devolver.
+  contact:
+    name: Time Biblioteca
+    url: https://example.com/biblioteca
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:3000
+    description: Local
+tags:
+  - name: Livros
+    description: Catálogo de livros
+  - name: Empréstimos
+    description: Fluxo principal de empréstimo e devolução
+  - name: Operação
+    description: Saúde e métricas
+paths:
+  /books:
+    post:
+      tags: [Livros]
+      operationId: createBook
+      summary: Cadastra um livro
+      description: Cria um livro com todos os exemplares disponíveis.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBook'
+      responses:
+        '201':
+          description: Livro criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      tags: [Livros]
+      operationId: listBooks
+      summary: Lista os livros
+      description: Retorna todos os livros cadastrados.
+      responses:
+        '200':
+          description: Lista de livros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+  /books/{id}:
+    get:
+      tags: [Livros]
+      operationId: getBook
+      summary: Busca um livro por id
+      description: Retorna um livro e a quantidade de exemplares disponíveis.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Livro encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /loans:
+    post:
+      tags: [Empréstimos]
+      operationId: createLoan
+      summary: Empresta um livro
+      description: Abre um empréstimo de 14 dias e baixa um exemplar do estoque.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLoan'
+      responses:
+        '201':
+          description: Empréstimo criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Sem exemplares disponíveis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /loans/{id}:
+    get:
+      tags: [Empréstimos]
+      operationId: getLoan
+      summary: Busca um empréstimo por id
+      description: Retorna o empréstimo e seu status.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Empréstimo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /loans/{id}/return:
+    post:
+      tags: [Empréstimos]
+      operationId: returnLoan
+      summary: Devolve um livro
+      description: Encerra o empréstimo, devolve o exemplar ao estoque e marca atraso se passou do prazo.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Empréstimo devolvido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Empréstimo já devolvido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /health:
+    get:
+      tags: [Operação]
+      operationId: getHealth
+      summary: Healthcheck
+      description: Retorna ok quando o serviço está de pé.
+      responses:
+        '200':
+          description: Serviço saudável
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /metrics:
+    get:
+      tags: [Operação]
+      operationId: getMetrics
+      summary: Métricas Prometheus
+      description: Métricas em formato texto do Prometheus, incluindo http_request_duration_seconds.
+      responses:
+        '200':
+          description: Métricas
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: Identificador do recurso
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Dados inválidos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    CreateBook:
+      type: object
+      required: [title, author, copies]
+      properties:
+        title:
+          type: string
+          example: Dom Casmurro
+        author:
+          type: string
+          example: Machado de Assis
+        copies:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          example: 2
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 7d9f0c1e-0b1a-4c3d-9e2f-1a2b3c4d5e6f
+        title:
+          type: string
+          example: Dom Casmurro
+        author:
+          type: string
+          example: Machado de Assis
+        copiesTotal:
+          type: integer
+          example: 2
+        copiesAvailable:
+          type: integer
+          example: 2
+    CreateLoan:
+      type: object
+      required: [bookId, borrower]
+      properties:
+        bookId:
+          type: string
+          example: 7d9f0c1e-0b1a-4c3d-9e2f-1a2b3c4d5e6f
+        borrower:
+          type: string
+          example: Ana
+    Loan:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 3b8e5f2a-1c4d-4e6f-8a9b-0c1d2e3f4a5b
+        bookId:
+          type: string
+          example: 7d9f0c1e-0b1a-4c3d-9e2f-1a2b3c4d5e6f
+        borrower:
+          type: string
+          example: Ana
+        loanedAt:
+          type: string
+          format: date-time
+          example: '2026-01-01T10:00:00.000Z'
+        dueAt:
+          type: string
+          format: date-time
+          example: '2026-01-15T10:00:00.000Z'
+        returnedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        status:
+          type: string
+          enum: [ACTIVE, RETURNED]
+          example: ACTIVE
+        late:
+          type: boolean
+          example: false
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: NO_COPIES_AVAILABLE
+            message:
+              type: string
+              example: Livro não tem exemplares disponíveis
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  path:
+                    type: string
+                  message:
+                    type: string
