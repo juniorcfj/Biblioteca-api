@@ -4,8 +4,8 @@ info:
   version: 1.0.0
   description: API de domínio único para cadastro de livros e empréstimos. Fluxo principal - cadastrar livro, emprestar e devolver.
   contact:
-    name: Time Biblioteca
-    url: https://example.com/biblioteca
+    name: Itamar Junior
+    url: https://github.com/juniorcfj/Biblioteca-api
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT

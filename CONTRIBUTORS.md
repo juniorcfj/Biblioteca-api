@@ -2,8 +2,7 @@
 
 | Nome | GitHub | Papel / contribuições |
 |---|---|---|
-| _Seu nome_ | [@SEU_USUARIO](https://github.com/SEU_USUARIO) | Autoria geral: domínio, API, testes, CI, documentação |
-| _Colega (se houver)_ | [@usuario](https://github.com/usuario) | _Ex.: revisão de código, smoke k6, OpenAPI_ |
+| Itamar Junior | [@juniorcfj](https://github.com/juniorcfj) | Autoria geral: domínio, API, testes, CI, observabilidade e documentação |
 
 ## Como contribuir
 
