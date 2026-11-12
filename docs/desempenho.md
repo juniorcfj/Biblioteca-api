@@ -48,7 +48,7 @@ docker compose --profile smoke run --rm k6
 | p50 / p90 / **p95** / máx | _? / ? / **?** / ? ms_ |
 | Taxa de erro | _?%_ |
 | Thresholds | _passou / falhou_ |
-| Cobertura de testes (`npm run test:coverage`) | _?% linhas, ?% branches_ |
+| Cobertura de testes (`npm run test:coverage`) | 100% linhas, 100% branches_ |
 
 **Leitura:** _uma ou duas frases: o p95 ficou abaixo ou acima dos 300 ms? Há folga?_
 

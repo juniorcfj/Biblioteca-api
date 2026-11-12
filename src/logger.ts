@@ -1,4 +1,6 @@
-import pino, { Logger } from 'pino';
+import pino from 'pino';
+
+export type Logger = pino.Logger;
 
 export function createLogger(level: string): Logger {
   return pino({
@@ -7,5 +9,3 @@ export function createLogger(level: string): Logger {
     timestamp: pino.stdTimeFunctions.isoTime,
   });
 }
-
-export type { Logger };
