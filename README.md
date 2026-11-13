@@ -1,6 +1,6 @@
 # Biblioteca API
 
-[![CI](https://github.com/juniorcfj/Biblioteca-api/actions/workflows/ci.yml/badge.svg)](https://github.com/juniorcfj/Biblioteca-api/actions/workflows/ci.yml)
+[![CI](https://github.com/ju/biblioteca-api/actions/workflows/ci.yml/badge.svg)](https://github.com/juniorcfj/biblioteca-api/actions/workflows/ci.yml)
 
 API de domínio único (TypeScript + Express) para **livros e empréstimos**.
 Fluxo principal: **cadastrar livro → emprestar → devolver**, com controle de estoque e prazo de 14 dias.
@@ -9,8 +9,9 @@ Fluxo principal: **cadastrar livro → emprestar → devolver**, com controle de
 
 | Item | Link |
 |---|---|
-| Repositório | https://github.com/juniorcfj/Biblioteca-api |
-| Execução verde do CI | https://github.com/juniorcfj/Biblioteca-api/actions/runs/ID_DA_EXECUCAO |
+| Repositório | https://github.com/juniorcfj/biblioteca-api _(se privado: convite enviado para o avaliador)_ |
+| Execução verde do CI | https://github.com/juniorcfj/Biblioteca-api/actions/workflows/ci.yml
+ |
 | Desempenho (p95 medido) | [`docs/desempenho.md`](docs/desempenho.md) |
 | Time | [`CONTRIBUTORS.md`](CONTRIBUTORS.md) |
 | Roteiro de apresentação | [`docs/roteiro-apresentacao.md`](docs/roteiro-apresentacao.md) |
