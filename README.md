@@ -9,7 +9,7 @@ Fluxo principal: **cadastrar livro → emprestar → devolver**, com controle de
 
 | Item | Link |
 |---|---|
-| Repositório | https://github.com/juniorcfj/biblioteca-api _(se privado: convite enviado para o avaliador)_ |
+| Repositório | https://github.com/juniorcfj/biblioteca-api  |
 | Execução verde do CI | https://github.com/juniorcfj/Biblioteca-api/actions/workflows/ci.yml
  |
 | Desempenho (p95 medido) | [`docs/desempenho.md`](docs/desempenho.md) |
